@@ -1,6 +1,6 @@
 import { immerable, produce } from "immer";
 
-interface Cell {
+export interface Cell {
   isMine: boolean;
   state: "hidden" | "revealed" | "flagged";
   numberOfNeighbourMines: number;
@@ -101,5 +101,12 @@ export default class Minesweeper {
       }
     }
     return neighbourCoordinates;
+  }
+
+  public indexToCoordinate(index: number): Coordinate {
+    return {
+      row: Math.floor(index / this.cols),
+      col: index % this.cols,
+    };
   }
 }
