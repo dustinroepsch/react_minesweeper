@@ -9,6 +9,14 @@ export default function Board(props: {
 }): JSX.Element {
   const classes = useStyles();
 
+  if (props.minesweeper.gamestate === "won") {
+    return <div>You won!</div>;
+  }
+
+  if (props.minesweeper.gamestate === "lost") {
+    return <div>You lost!</div>;
+  }
+
   return (
     <div className={classes.board}>
       {props.minesweeper.cells.flat().map((cell, index) => (

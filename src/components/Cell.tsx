@@ -24,7 +24,9 @@ export default function CellUI({
   );
 
   const classToMerge =
-    cell.state === "hidden" ? classes.hidden : classes.revealed;
+    cell.state === "hidden" || cell.state === "flagged"
+      ? classes.hidden
+      : classes.revealed;
   const className = mergeClasses(classes.cell, classToMerge);
 
   return (
