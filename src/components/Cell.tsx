@@ -33,16 +33,16 @@ export default function CellUI({
   const className = mergeClasses(classes.cell, classToMerge);
 
   return (
-    <div
+    <button
       className={className}
-      style={cell.delay ? { transitionDelay: `${cell.delay * 0.1}s` } : {}}
+      style={cell.delay ? { transitionDelay: `${cell.delay * 0.05}s` } : {}}
       onClick={onClick}
       onContextMenu={onContextMenu}
     >
       {cell.state === "flagged" && "🚩"}
       {cell.state === "revealed" &&
         (cell.isMine ? "💣" : cell.numberOfNeighbourMines || "")}
-    </div>
+    </button>
   );
 }
 
@@ -55,7 +55,7 @@ const useStyles = makeStyles({
     aspectRatio: "1 / 1",
     borderRadius: "2px",
     border: "1px solid black",
-    transition: "all 0.2s ease-in-out",
+    transition: "all 0.1s ease-in-out",
   },
 
   hidden: {
