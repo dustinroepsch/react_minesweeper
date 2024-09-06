@@ -3,7 +3,9 @@ import Minesweeper from "../minesweeper";
 import CellUI from "./Cell";
 export default function Board(props: {
   minesweeper: Minesweeper;
-  setMinesweeper: (minesweeper: Minesweeper) => void;
+  setMinesweeper: (
+    minesweeper: Minesweeper | ((minesweeper: Minesweeper) => Minesweeper)
+  ) => void;
 }): JSX.Element {
   const classes = useStyles();
 
@@ -13,9 +15,18 @@ export default function Board(props: {
         <CellUI
           key={index}
           cell={cell}
+          revealCell={() => {
+            const { row, col } = props.minesweeper.indexToCoordinate(index);
+            props.setMinesweeper((minesweeper) =>
+              minesweeper.clickCell(row, col)
+            );
+          }}
           toggleFlagged={() => {
             const { row, col } = props.minesweeper.indexToCoordinate(index);
-            props.setMinesweeper(props.minesweeper.toggleFlagged(row, col));
+
+            props.setMinesweeper((minesweeper) =>
+              minesweeper.toggleFlagged(row, col)
+            );
           }}
         />
       ))}
@@ -26,7 +37,7 @@ export default function Board(props: {
 const useStyles = makeStyles({
   board: {
     display: "grid",
-    gridTemplateColumns: "repeat(10, 20px)",
+    gridTemplateColumns: "repeat(10, min-content)",
     gap: "1px",
   },
 });

@@ -15,6 +15,7 @@ export default class Minesweeper {
   [immerable] = true;
 
   public readonly cells: Cell[][];
+  public gamestate: "won" | "lost" | "playing" = "playing";
 
   constructor(
     public readonly rows: number,
@@ -31,6 +32,31 @@ export default class Minesweeper {
 
     this.placeMines();
     this.calculateNeighborMines();
+  }
+
+  public clickCell(row: number, col: number): Minesweeper {
+    return produce(this, (draft) => {
+      const cell = draft.cells[row][col];
+      if (cell.isMine) {
+        draft.gamestate = "lost";
+        return;
+      }
+
+      const cellsToReveal: Coordinate[] = [{ row, col }];
+
+      while (cellsToReveal.length > 0) {
+        const { row, col } = cellsToReveal.shift()!;
+        draft.cells[row][col].state = "revealed";
+        if (draft.cells[row][col].numberOfNeighbourMines === 0) {
+          const neighors = this.getInBoundNeighbourCoordinates(row, col);
+          for (const neighbor of neighors) {
+            if (draft.cells[neighbor.row][neighbor.col].state === "hidden") {
+              cellsToReveal.push(neighbor);
+            }
+          }
+        }
+      }
+    });
   }
 
   public toggleFlagged(row: number, col: number): Minesweeper {
