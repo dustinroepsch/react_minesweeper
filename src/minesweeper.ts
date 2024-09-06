@@ -4,6 +4,7 @@ export interface Cell {
   isMine: boolean;
   state: "hidden" | "revealed" | "flagged";
   numberOfNeighbourMines: number;
+  delay?: number;
 }
 
 interface Coordinate {
@@ -42,16 +43,29 @@ export default class Minesweeper {
         return;
       }
 
-      const cellsToReveal: Coordinate[] = [{ row, col }];
+      const cellsToReveal: (Coordinate & { delay: number })[] = [
+        { row, col, delay: 0 },
+      ];
+
+      const visited = new Set<string>();
+      visited.add(`${row},${col}`);
 
       while (cellsToReveal.length > 0) {
-        const { row, col } = cellsToReveal.shift()!;
-        draft.cells[row][col].state = "revealed";
-        if (draft.cells[row][col].numberOfNeighbourMines === 0) {
+        const { row, col, delay } = cellsToReveal.shift()!;
+        const draftCell = draft.cells[row][col];
+        draftCell.state = "revealed";
+        draftCell.delay = delay;
+        if (draftCell.numberOfNeighbourMines === 0) {
           const neighors = this.getInBoundNeighbourCoordinates(row, col);
           for (const neighbor of neighors) {
-            if (draft.cells[neighbor.row][neighbor.col].state === "hidden") {
-              cellsToReveal.push(neighbor);
+            const neighborCell = draft.cells[neighbor.row][neighbor.col];
+            if (
+              (!visited.has(`${neighbor.row},${neighbor.col}`) &&
+                neighborCell.state === "hidden") ||
+              neighborCell.state === "flagged"
+            ) {
+              cellsToReveal.push({ ...neighbor, delay: delay + 1 });
+              visited.add(`${neighbor.row},${neighbor.col}`);
             }
           }
         }
