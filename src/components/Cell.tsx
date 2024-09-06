@@ -13,15 +13,18 @@ export default function CellUI({
 }): JSX.Element {
   const classes = useStyles();
 
-  const onClick: MouseEventHandler = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (e.button === 0) {
-        revealCell();
-      }
-    },
-    [revealCell]
-  );
+  const onClick: MouseEventHandler = (e) => {
+    e.preventDefault();
+    if (e.button === 0) {
+      revealCell();
+    }
+  };
+
+  const onContextMenu: MouseEventHandler = (e) => {
+    e.preventDefault();
+    toggleFlagged();
+    return false;
+  };
 
   const classToMerge =
     cell.state === "hidden" || cell.state === "flagged"
@@ -30,15 +33,7 @@ export default function CellUI({
   const className = mergeClasses(classes.cell, classToMerge);
 
   return (
-    <div
-      className={className}
-      onClick={onClick}
-      onContextMenu={(e) => {
-        e.preventDefault();
-        toggleFlagged();
-        return false;
-      }}
-    >
+    <div className={className} onClick={onClick} onContextMenu={onContextMenu}>
       {cell.state === "flagged" && "🚩"}
       {cell.state === "revealed" &&
         (cell.isMine ? "💣" : cell.numberOfNeighbourMines || "")}
