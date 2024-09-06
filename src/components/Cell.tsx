@@ -1,6 +1,6 @@
 import { makeStyles, mergeClasses } from "@griffel/react";
 import { Cell } from "../minesweeper";
-import { MouseEventHandler, useCallback } from "react";
+import { MouseEventHandler } from "react";
 
 export default function CellUI({
   cell,
