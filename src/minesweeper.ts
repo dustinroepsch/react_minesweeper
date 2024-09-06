@@ -20,14 +20,14 @@ export default class Minesweeper {
   constructor(
     public readonly rows: number,
     public readonly cols: number,
-    public readonly mines: number
+    public readonly mines: number,
   ) {
     this.cells = Array.from({ length: rows }, () =>
       Array.from({ length: cols }, () => ({
         isMine: false,
         state: "hidden",
         numberOfNeighbourMines: 0,
-      }))
+      })),
     );
 
     this.placeMines();
@@ -108,7 +108,7 @@ export default class Minesweeper {
 
   private *getInBoundNeighbourCoordinates(
     row: number,
-    col: number
+    col: number,
   ): Generator<Coordinate> {
     const offsets = [-1, 0, 1];
 

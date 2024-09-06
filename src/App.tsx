@@ -8,7 +8,7 @@ function App() {
   useNormalize();
 
   const [minesweeper, setMinesweeper] = useState(
-    () => new Minesweeper(10, 10, 10)
+    () => new Minesweeper(10, 10, 10),
   );
 
   const classes = useStyles();
