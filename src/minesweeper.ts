@@ -106,11 +106,10 @@ export default class Minesweeper {
     return row >= 0 && row < this.rows && col >= 0 && col < this.cols;
   }
 
-  private getInBoundNeighbourCoordinates(
+  private *getInBoundNeighbourCoordinates(
     row: number,
     col: number
-  ): Coordinate[] {
-    const neighbourCoordinates: Coordinate[] = [];
+  ): Generator<Coordinate> {
     const offsets = [-1, 0, 1];
 
     for (const rowOffset of offsets) {
@@ -122,11 +121,10 @@ export default class Minesweeper {
         const newRow = row + rowOffset;
         const newCol = col + colOffset;
         if (this.inBounds(newRow, newCol)) {
-          neighbourCoordinates.push({ row: newRow, col: newCol });
+          yield { row: newRow, col: newCol };
         }
       }
     }
-    return neighbourCoordinates;
   }
 
   public indexToCoordinate(index: number): Coordinate {
